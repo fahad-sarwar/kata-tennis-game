@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -114,7 +113,7 @@ namespace TennisGameKata
     {
         private readonly string _score;
 
-        private static readonly List<Outcome> _outcomeList = new List<Outcome>
+        private static readonly List<Outcome> _outcomes = new List<Outcome>
         {
             new Outcome(new TennisGame(), new TennisGame("15:0"), new TennisGame("0:15")),
             new Outcome(new TennisGame("15:0"), new TennisGame("30:0"), new TennisGame("15:15")),
@@ -143,21 +142,6 @@ namespace TennisGameKata
             _score = score;
         }
 
-        public TennisGame PlayerOneScores()
-        {
-            return _outcomeList.First(o => o.CurrentScore.Equals(this)).PlayerOneScore;
-        }
-
-        public TennisGame PlayerTwoScores()
-        {
-            return _outcomeList.First(o => o.CurrentScore.Equals(this)).PlayerTwoScore;
-        }
-
-        public string CurrentScore()
-        {
-            return _score;
-        }
-
         public override bool Equals(object obj)
         {
             return ((TennisGame)obj)._score == _score;
@@ -166,6 +150,26 @@ namespace TennisGameKata
         public override int GetHashCode()
         {
             return _score.GetHashCode();
+        }
+
+        public TennisGame PlayerOneScores()
+        {
+            return FindCurrentScore().PlayerOneScore;
+        }
+
+        public TennisGame PlayerTwoScores()
+        {
+            return FindCurrentScore().PlayerTwoScore;
+        }
+
+        public string CurrentScore()
+        {
+            return _score;
+        }
+
+        private Outcome FindCurrentScore()
+        {
+            return _outcomes.First(o => o.CurrentScore.Equals(this));
         }
     }
 
@@ -178,8 +182,8 @@ namespace TennisGameKata
             PlayerTwoScore = playerTwoScore;
         }
 
-        public TennisGame CurrentScore { get; private set; }
-        public TennisGame PlayerOneScore { get; private set; }
-        public TennisGame PlayerTwoScore { get; private set; }
+        public TennisGame CurrentScore { get; }
+        public TennisGame PlayerOneScore { get; }
+        public TennisGame PlayerTwoScore { get; }
     }
 }
